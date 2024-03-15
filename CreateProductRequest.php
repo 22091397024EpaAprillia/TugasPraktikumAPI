@@ -4,9 +4,10 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class MahasiswaRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
@@ -16,7 +17,7 @@ class CategoryRequest extends FormRequest
     }
 
     /**
-     *peraturan untuk request
+     * Get the validation rules that apply to the request.
      *
      * @return array
      */
@@ -24,21 +25,24 @@ class CategoryRequest extends FormRequest
     {
         switch ($this->method()) {
             case 'POST':
-            {
-                return [
-                    'name' => ['required', 'max:255', 'unique:categories'],
-                    'category_id' => ['nullable'],
-                ];
-            }
+                {
+                    return [
+                        'nama' => ['required', 'string', 'max:255'],
+                        'nim' => ['required', 'string', 'max:20', 'unique:mahasiswa'],
+                        'jurusan' => ['required', 'string', 'max:255'],
+                    ];
+                }
             case 'PUT':
             case 'PATCH':
-            {
-                return [
-                    'name' => ['required', 'max:255', 'unique:categories,name,'.$this->route()->category->id],
-                    'category_id' => ['nullable'],
-                ];
-            }
-            default: break;
+                {
+                    return [
+                        'nama' => ['required', 'string', 'max:255'],
+                        'nim' => ['required', 'string', 'max:20', 'unique:mahasiswa,nim,' . $this->route('mahasiswa')->id],
+                        'jurusan' => ['required', 'string', 'max:255'],
+                    ];
+                }
+            default:
+                break;
         }
     }
 }
